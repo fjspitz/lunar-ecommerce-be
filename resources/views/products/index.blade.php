@@ -28,24 +28,28 @@
                                 <th>Brand</th>
                                 <th>Category</th>
                                 <th>Status</th>
-                                <th>Stock</th>
+                                <th class="p-4">Stock</th>
                                 <th>SKU</th>
                                 <th>Price</th>
-                                <th>Options</th>
+                                <th class="p-4">Options</th>
                                 {{-- <th>Image</th> --}}
                             </tr>
                         </thead>
 
                         <tbody class="text-sm">
-                            @forelse ($data['data'] as $p)
+                            @forelse ($items as $p)
                             <tr>
                                 {{-- <td class="p-4">{{ $p['id'] }}</td> --}}
                                 <td class="p-4 border-b">
                                     <span class="font-semibold">
-                                        {{ $p['name'] }}
+                                        {{ Illuminate\Support\Str::limit($p['name'], 40) }}
                                     </span>
                                 </td>
-                                <td class="p-4 border-b">{{ $p['description'] }}</td>
+
+                                <td class="p-4 border-b">
+                                    {{ Illuminate\Support\Str::limit($p['description'], 120) }}
+                                </td>
+
                                 <td class="p-4 border-b">{{ $p['brand_name'] }}</td>
                                 <td class="p-4 border-b">{{ $p['product_type_name'] }}</td>
                                 <td class="p-4 border-b">
@@ -120,6 +124,10 @@
                             @endforelse
                         </tbody>
                     </table>
+
+                    <div id="paginator" class="px-2 mt-4">
+                        {{ $items->links() }}
+                    </div>
                 </div>
             </div>
         </div>

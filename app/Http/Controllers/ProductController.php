@@ -9,32 +9,48 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class ProductController extends Controller
 {
     public function index(Request $request): View
     {
-        $page = $request->query('page') ? '?page=' . $request->query('page') : '?page=1';
+        $page = $request->query('page', 1);
+        $items = [];
+        $total = 0;
+        $per_page = 0;
+        $current_page = 0;
 
-        info($page);
+        //info($page);
 
         //$data = [];
         $response = Http::acceptJson()->withToken($this->getUserToken())
             ->get($this->getBaseUrl() . '/products', [
                 'customer_group' => Auth::user()->customer_group_handle,
-                'page' => $request->query('page') ? $request->query('page') : '1',
+                'page' => $page,
             ]);
 
         if ($response->successful()) {
             //$data = $response->json('data');
+            $items = new Collection($response->json('data'));
+            $total = $response->json('total');
+            $per_page = $response->json('per_page');
+            $current_page = $response->json('current_page');
+
+            $paginator = new LengthAwarePaginator($items, $total, $per_page, $current_page, [
+                'path' => $request->url(),
+                'query' => $request->query(),
+            ]);
         } else {
-            info("Otra cosa: {$response->body()}");
-            info(Auth::user()->customer_group_handle);
+            //info("Otra cosa: {$response->body()}");
+            //info(Auth::user()->customer_group_handle);
         }
 
         return view('products.index', [
             //'products' => $products,
-            'data' => $response->json(),
+            //'data' => $response->json(),
+            'items' => $paginator,
         ]);
     }
 
