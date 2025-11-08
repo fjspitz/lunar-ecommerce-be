@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Products') }}
+            {{ __('Payment methods') }}
         </h2>
     </x-slot>
 
@@ -120,15 +120,15 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8">No hay productos aún.</td>
+                                <td colspan="8">No hay métodos de pago aún.</td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
 
-                    <div id="paginator" class="px-2 mt-4">
+                    {{-- <div id="paginator" class="px-2 mt-4">
                         {{ $items->links() }}
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

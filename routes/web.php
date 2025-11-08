@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +25,18 @@ Route::prefix('collections')->group(function () {
     Route::get('/', function () {
         return view('collections.index');
     })->name('collection.index');
+});
+
+Route::prefix('orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('orders.index');
+});
+
+Route::prefix('customers')->group(function () {
+    Route::get('/', [CustomerController::class, 'index'])->name('customers.index');
+});
+
+Route::prefix('paymentmethods')->group(function () {
+    Route::get('/', [PaymentMethodController::class, 'index'])->name('paymentmethods.index');
 });
 
 Route::middleware('auth')->group(function () {
